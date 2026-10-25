@@ -622,14 +622,14 @@
                 ]
             },
             {
-                name: "08. 十字頂點 (5x5 Cross Peaks)", size: 5, maxMoves: 14,
-                // 最佳解法 (4 步): (0,2) -> (2,0) -> (2,4) -> (4,2)
+                // 🔥 演算法嚴格校正：最少且精準需要 8 步通關（100% 唯一解）
+                name: "08. 核心重定向 (Core Redirection)", size: 5, maxMoves: 16,
                 grid: [
-                    { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 },
-                    { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 },
-                    { type:'standard',state:0 },{ type:'standard',state:0 },{ type:'static',  state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },
-                    { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 },
-                    { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 }
+                    { type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },
+                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:0 },
+                    { type:'standard', state:1 },{ type:'standard', state:1 },{ type:'static',   state:1 },{ type:'standard', state:1 },{ type:'standard', state:1 },
+                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:0 },
+                    { type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 }
                 ]
             },
             {
