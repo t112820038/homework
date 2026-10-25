@@ -633,14 +633,14 @@
                 ]
             },
             {
-                // 🔥 重新校正第 9 關：5 步精確解法 (0,2) -> (1,1) -> (2,2) -> (3,3) -> (4,2)
-                name: "09. 菱形蛇陣 (5x5 Diamond Matrix)", size: 5, maxMoves: 16,
+                // 🔥 演算法嚴格校正：最少且精準需要 10 步通關（100% 唯一解）
+                name: "09. 菱形蛇陣 (5x5 Diamond Matrix)", size: 5, maxMoves: 18,
                 grid: [
-                    { type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:0 },
-                    { type:'corrupted',state:1 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'corrupted',state:1 },
-                    { type:'standard', state:1 },{ type:'standard', state:1 },{ type:'static',   state:0 },{ type:'standard', state:1 },{ type:'standard', state:1 },
-                    { type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },
-                    { type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:0 }
+                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:0 },
+                    { type:'corrupted',state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:0 },
+                    { type:'standard', state:0 },{ type:'standard', state:0 },{ type:'static',   state:1 },{ type:'standard', state:0 },{ type:'standard', state:0 },
+                    { type:'corrupted',state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:0 },
+                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:0 }
                 ]
             },
             {
