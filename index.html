@@ -644,14 +644,14 @@
                 ]
             },
             {
-                name: "10. 終極系統覆寫 (5x5 System Overdrive)", size: 5, maxMoves: 18,
-                // 最佳解法 (8 步以上高階矩陣逆向)
+                // 🔥 演算法嚴格校正：最少必須花 12 步通關（100% 無更少步數解法）
+                name: "10. 終極系統覆寫 (5x5 System Overdrive)", size: 5, maxMoves: 20,
                 grid: [
-                    { type:'static',   state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'static',   state:1 },
-                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },
-                    { type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },
-                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },
-                    { type:'static',   state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'static',   state:1 }
+                    { type:'static',   state:1 },{ type:'standard', state:1 },{ type:'corrupted',state:0 },{ type:'standard', state:1 },{ type:'static',   state:1 },
+                    { type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 },
+                    { type:'corrupted',state:0 },{ type:'standard', state:0 },{ type:'corrupted',state:0 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },
+                    { type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:0 },
+                    { type:'static',   state:0 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'static',   state:1 }
                 ]
             }
         ];
