@@ -555,7 +555,7 @@
         /* 10 個經過嚴格 Mod 2 線性代數求解驗證的關卡配置 */
         const LEVELS = [
             {
-                name: "01. 入侵試煉 (3x3 Basic)", size: 3, maxMoves: 6,
+                name: "01. 入侵試煉 (3x3 Basic)", size: 3, maxMoves: 4,
                 // 最佳解法 (2 步): 點擊 (0,1) -> (2,1)
                 grid: [
                     { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
@@ -565,7 +565,7 @@
             },
             {
                 // 🔥 重新校正第 2 關：3 步非對稱高階解法 (0,1) -> (1,0) -> (2,2)
-                name: "02. 雙重對角 (3x3 Diagonal)", size: 3, maxMoves: 8,
+                name: "02. 雙重對角 (3x3 Diagonal)", size: 3, maxMoves: 6,
                 grid: [
                     { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
@@ -602,7 +602,7 @@
                 ]
             },
             {
-                // 🔥 重新校正第 6 關：4 步極致定位 (1,1) -> (1,2) -> (2,1) -> (2,2)（避開綠色鎖定點 (0,0) 與 (3,3)）
+                // 🔥 重新校正第 6 關：(1,3), (2,1), (2,2), (2,3), (3,2), (3,3), (3,4), (4,2)
                 name: "06. 雙重錨點矩陣 (Dual Static)", size: 4, maxMoves: 12,
                 grid: [
                     { type: 'static',   state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
@@ -612,7 +612,7 @@
                 ]
             },
             {
-                // 🔥 7 步深度挑戰版第 7 關！徹底擺脫低步數套路
+                // 🔥 7 步深度挑戰版第 7 關！徹底擺脫低步數套路 : (0,0), (0,2), (0,3), (1,0), (1,1), (1,3), (2,0)
                 name: "07. 頻寬警戒區 (Bandwidth Lock)", size: 4, maxMoves: 10,
                 grid: [
                     { type: 'standard',  state: 1 }, { type: 'corrupted',state: 0 }, { type: 'standard', state: 1 }, { type: 'standard',  state: 0 },
