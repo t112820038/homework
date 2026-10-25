@@ -401,7 +401,7 @@
             </div>
             <div class="stat-box">
                 <span class="stat-label">剩餘頻寬 (步數)</span>
-                <span class="stat-value" id="hudMoves">12</span>
+                <span class="stat-value" id="hudMoves">10</span>
             </div>
             <div class="stat-box">
                 <span class="stat-label">點亮進度</span>
@@ -552,10 +552,11 @@
             document.getElementById('soundToggleBtn').innerText = audio.enabled ? "🔊 音效: 開" : "🔇 音效: 關";
         }
 
-        /* 10 個由正向演算保證 100% 可解的關卡配置 */
+        /* 10 個具備漸進難度梯級的關卡配置 */
         const LEVELS = [
             {
-                name: "01. 入侵試煉 (3x3 Basic)", size: 3, maxMoves: 8,
+                name: "01. 入侵試煉 (3x3 Basic)", size: 3, maxMoves: 6,
+                // 需 2 步解法 (0,1) -> (2,1)
                 grid: [
                     { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
@@ -563,15 +564,17 @@
                 ]
             },
             {
-                name: "02. 雙重對角 (3x3 Diagonal)", size: 3, maxMoves: 10,
+                // 🔥 重新優化的第二關：需要 4 步點擊四個角點通關，告一步通關的過簡現象！
+                name: "02. 雙重對角 (3x3 Corner Loop)", size: 3, maxMoves: 8,
                 grid: [
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
-                    { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 },
-                    { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 }
                 ]
             },
             {
-                name: "03. 綠色錨點鎖定 (Static Barrier)", size: 3, maxMoves: 10,
+                name: "03. 綠色錨點鎖定 (Static Barrier)", size: 3, maxMoves: 8,
+                // 需 3 步解法 (0,1) -> (2,1) -> (1,0)
                 grid: [
                     { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 0 }, { type: 'static',   state: 1 }, { type: 'standard', state: 0 },
@@ -579,7 +582,8 @@
                 ]
             },
             {
-                name: "04. 四角聯動 (4x4 Four Corners)", size: 4, maxMoves: 12,
+                name: "04. 四角聯動 (4x4 Four Corners)", size: 4, maxMoves: 10,
+                // 需 4 步解法 (0,0), (0,3), (3,0), (3,3)
                 grid: [
                     { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
@@ -588,8 +592,8 @@
                 ]
             },
             {
-                // 🔥 最新更正的 5 步適中難度第 5 關！
-                name: "05. 惡意干擾 (Corrupted Switch)", size: 4, maxMoves: 12,
+                name: "05. 惡意干擾 (Corrupted Switch)", size: 4, maxMoves: 10,
+                // 需 5 步適中難度解法
                 grid: [
                     { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
                     { type: 'standard',  state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
@@ -598,7 +602,8 @@
                 ]
             },
             {
-                name: "06. 雙重錨點矩陣 (Dual Static)", size: 4, maxMoves: 14,
+                name: "06. 雙重錨點矩陣 (Dual Static)", size: 4, maxMoves: 12,
+                // 需 4 步精確定位解法 (0,1), (1,0), (2,3), (3,2)
                 grid: [
                     { type: 'static',   state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
                     { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
@@ -608,15 +613,17 @@
             },
             {
                 name: "07. 頻寬警戒區 (Bandwidth Lock)", size: 4, maxMoves: 12,
+                // 需 4 步解法 (0,0), (0,3), (3,0), (3,3)
                 grid: [
-                    { type: 'standard',  state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard', state: 0 }, { type: 'standard',  state: 1 },
-                    { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'static',   state: 0 }, { type: 'standard',  state: 0 },
-                    { type: 'standard',  state: 0 }, { type: 'static',   state: 0 }, { type: 'standard', state: 0 }, { type: 'standard',  state: 1 },
-                    { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard',  state: 0 }
+                    { type: 'standard',  state: 0 }, { type: 'corrupted',state: 0 }, { type: 'standard', state: 0 }, { type: 'standard',  state: 0 },
+                    { type: 'corrupted', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'corrupted', state: 0 },
+                    { type: 'corrupted', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'corrupted', state: 0 },
+                    { type: 'standard',  state: 0 }, { type: 'corrupted',state: 0 }, { type: 'standard', state: 0 }, { type: 'standard',  state: 0 }
                 ]
             },
             {
-                name: "08. 十字頂點 (5x5 Cross Peaks)", size: 5, maxMoves: 16,
+                name: "08. 十字頂點 (5x5 Cross Peaks)", size: 5, maxMoves: 14,
+                // 需 4 步大型十字解法 (0,2), (2,0), (2,4), (4,2)
                 grid: [
                     { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 },
                     { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 },
@@ -626,7 +633,8 @@
                 ]
             },
             {
-                name: "09. 四角防禦 (5x5 Corner Defense)", size: 5, maxMoves: 18,
+                name: "09. 四角防禦 (5x5 Corner Defense)", size: 5, maxMoves: 16,
+                // 需 6 步解法
                 grid: [
                     { type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:0 },
                     { type:'corrupted',state:0 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'corrupted',state:0 },
@@ -636,7 +644,8 @@
                 ]
             },
             {
-                name: "10. 終極系統覆寫 (5x5 System Overdrive)", size: 5, maxMoves: 20,
+                name: "10. 終極系統覆寫 (5x5 System Overdrive)", size: 5, maxMoves: 18,
+                // 需 8 步高階求解
                 grid: [
                     { type:'static',   state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'static',   state:1 },
                     { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },
@@ -651,24 +660,21 @@
         let gameState = { currentLevelIndex: 0, moves: 0, grid: [], unlockedLevels: 1, bypassedLevels: [], isWon: false };
 
         function loadProgress() {
-            const savedUnlocked = localStorage.getItem('cyber_matrix_v2_unlocked');
+            const savedUnlocked = localStorage.getItem('cyber_matrix_v4_unlocked');
             if (savedUnlocked) gameState.unlockedLevels = parseInt(savedUnlocked, 10);
-            const savedBypassed = localStorage.getItem('cyber_matrix_v2_bypassed');
+            const savedBypassed = localStorage.getItem('cyber_matrix_v4_bypassed');
             if (savedBypassed) { try { gameState.bypassedLevels = JSON.parse(savedBypassed); } catch(e) { gameState.bypassedLevels = []; } }
         }
 
         function saveProgress() {
-            localStorage.setItem('cyber_matrix_v2_unlocked', gameState.unlockedLevels);
-            localStorage.setItem('cyber_matrix_v2_bypassed', JSON.stringify(gameState.bypassedLevels));
+            localStorage.setItem('cyber_matrix_v4_unlocked', gameState.unlockedLevels);
+            localStorage.setItem('cyber_matrix_v4_bypassed', JSON.stringify(gameState.bypassedLevels));
         }
 
         // 🗑️ 清除所有存檔資料，重置遊戲
         function clearSaveData() {
             if (confirm("確定要抹除所有系統通關紀錄與快取嗎？（遊戲將從第 1 關重新開始）")) {
-                localStorage.removeItem('cyber_matrix_v2_unlocked');
-                localStorage.removeItem('cyber_matrix_v2_bypassed');
-                localStorage.removeItem('cyber_matrix_unlocked');
-                localStorage.removeItem('cyber_matrix_bypassed');
+                localStorage.clear();
                 gameState.unlockedLevels = 1;
                 gameState.bypassedLevels = [];
                 initLevel(0);
