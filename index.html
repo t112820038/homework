@@ -588,14 +588,12 @@
                 ]
             },
             {
-                // ✅ 重構後修正的第 5 關（絕對可解！）
-                // 完美解法：依序點擊 (0,1) 與 (3,2) 兩步直接全亮通關！
-                name: "05. 惡意干擾 (Corrupted Switch)", size: 4, maxMoves: 12,
+                name: "05. 惡意干擾 (Corrupted Switch)", size: 4, maxMoves: 10,
                 grid: [
-                    { type: 'standard',  state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
-                    { type: 'standard',  state: 1 }, { type: 'corrupted',state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
-                    { type: 'standard',  state: 1 }, { type: 'standard', state: 1 }, { type: 'corrupted',state: 0 }, { type: 'standard', state: 1 },
-                    { type: 'standard',  state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }
+                    { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
+                    { type: 'standard',  state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
+                    { type: 'standard',  state: 0 }, { type: 'standard', state: 1 }, { type: 'corrupted',state: 1 }, { type: 'standard', state: 0 },
+                    { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }
                 ]
             },
             {
