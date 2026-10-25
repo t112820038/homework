@@ -407,8 +407,9 @@
                 <span class="stat-label">點亮進度</span>
                 <span class="stat-value" id="hudTargets">0 / 9</span>
             </div>
-            <div class="stat-box">
+            <div class="stat-box" style="display:flex; gap:4px;">
                 <button class="cyber-btn" onclick="restartLevel()">🔄 重置</button>
+                <button class="cyber-btn btn-magenta" onclick="clearSaveData()" title="清空進度與快取">🗑️ 抹除紀錄</button>
             </div>
         </div>
     </div>
@@ -579,7 +580,6 @@
             },
             {
                 name: "04. 四角聯動 (4x4 Four Corners)", size: 4, maxMoves: 12,
-                // 經過逆向求解：點擊 4 個角落 (0,0),(0,3),(3,0),(3,3) 即可完全點亮
                 grid: [
                     { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
@@ -588,7 +588,8 @@
                 ]
             },
             {
-                name: "05. 惡意干擾 (Corrupted Switch)", size: 4, maxMoves: 10,
+                // 🔥 最新更正的 5 步適中難度第 5 關！
+                name: "05. 惡意干擾 (Corrupted Switch)", size: 4, maxMoves: 12,
                 grid: [
                     { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
                     { type: 'standard',  state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
@@ -598,7 +599,6 @@
             },
             {
                 name: "06. 雙重錨點矩陣 (Dual Static)", size: 4, maxMoves: 14,
-                // 解法：點擊 (0,1), (1,0), (2,3), (3,2) 通關
                 grid: [
                     { type: 'static',   state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
                     { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
@@ -617,7 +617,6 @@
             },
             {
                 name: "08. 十字頂點 (5x5 Cross Peaks)", size: 5, maxMoves: 16,
-                // 解法：點擊 (0,2), (2,0), (2,4), (4,2) 即可通關
                 grid: [
                     { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 },
                     { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 },
@@ -628,7 +627,6 @@
             },
             {
                 name: "09. 四角防禦 (5x5 Corner Defense)", size: 5, maxMoves: 18,
-                // 解法：點擊 4 個角落即可破解
                 grid: [
                     { type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:0 },
                     { type:'corrupted',state:0 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'standard', state:1 },{ type:'corrupted',state:0 },
@@ -653,15 +651,29 @@
         let gameState = { currentLevelIndex: 0, moves: 0, grid: [], unlockedLevels: 1, bypassedLevels: [], isWon: false };
 
         function loadProgress() {
-            const savedUnlocked = localStorage.getItem('cyber_matrix_unlocked');
+            const savedUnlocked = localStorage.getItem('cyber_matrix_v2_unlocked');
             if (savedUnlocked) gameState.unlockedLevels = parseInt(savedUnlocked, 10);
-            const savedBypassed = localStorage.getItem('cyber_matrix_bypassed');
+            const savedBypassed = localStorage.getItem('cyber_matrix_v2_bypassed');
             if (savedBypassed) { try { gameState.bypassedLevels = JSON.parse(savedBypassed); } catch(e) { gameState.bypassedLevels = []; } }
         }
 
         function saveProgress() {
-            localStorage.setItem('cyber_matrix_unlocked', gameState.unlockedLevels);
-            localStorage.setItem('cyber_matrix_bypassed', JSON.stringify(gameState.bypassedLevels));
+            localStorage.setItem('cyber_matrix_v2_unlocked', gameState.unlockedLevels);
+            localStorage.setItem('cyber_matrix_v2_bypassed', JSON.stringify(gameState.bypassedLevels));
+        }
+
+        // 🗑️ 清除所有存檔資料，重置遊戲
+        function clearSaveData() {
+            if (confirm("確定要抹除所有系統通關紀錄與快取嗎？（遊戲將從第 1 關重新開始）")) {
+                localStorage.removeItem('cyber_matrix_v2_unlocked');
+                localStorage.removeItem('cyber_matrix_v2_bypassed');
+                localStorage.removeItem('cyber_matrix_unlocked');
+                localStorage.removeItem('cyber_matrix_bypassed');
+                gameState.unlockedLevels = 1;
+                gameState.bypassedLevels = [];
+                initLevel(0);
+                updateStatusBanner("⚠️ 系統數據已重置！所有通關紀錄已抹除。", true);
+            }
         }
 
         function initLevel(index) {
