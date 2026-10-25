@@ -287,7 +287,7 @@
             opacity: 0.8;
         }
 
-        /* 紫色侵蝕節點 (Corrupted) */
+        /* 紫色侵蝕節點 (Corrupted - 扣雙倍步數) */
         .node.corrupted {
             border-color: var(--purple);
             background: rgba(176, 38, 255, 0.1);
@@ -555,6 +555,7 @@
         const LEVELS = [
             {
                 name: "01. 入侵試煉 (3x3 Basic)", size: 3, maxMoves: 6,
+                // state: 1 表示亮 (ON)，0 表示暗 (OFF)
                 grid: [
                     { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
@@ -570,12 +571,11 @@
                 ]
             },
             {
-                // 重構後的第 3 關：已通過數學演算確保 3 步完全可解
-                name: "03. 綠色錨點鎖定 (Static Barrier)", size: 3, maxMoves: 8,
+                name: "03. 綠色錨點鎖定 (Static Barrier)", size: 3, maxMoves: 7,
                 grid: [
-                    { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 },
-                    { type: 'standard', state: 0 }, { type: 'static',   state: 1 }, { type: 'standard', state: 0 },
-                    { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
+                    { type: 'standard', state: 1 }, { type: 'static',   state: 0 }, { type: 'standard', state: 1 },
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 }
                 ]
             },
             {
@@ -666,6 +666,7 @@
             const levelData = LEVELS[index];
             gameState.moves = levelData.maxMoves;
             gameState.isWon = false;
+            // 深拷貝矩陣狀態
             gameState.grid = JSON.parse(JSON.stringify(levelData.grid));
 
             renderBoard(levelData.size);
@@ -688,41 +689,47 @@
                 core.className = 'node-core';
                 nodeEl.appendChild(core);
 
+                // 綁定點擊事件
                 nodeEl.addEventListener('click', () => onNodeClick(idx, size));
 
                 gridContainer.appendChild(nodeEl);
             });
         }
 
-        /* 點擊觸發十字連鎖翻轉 */
+        /* 點擊觸發十字連鎖翻轉 (Lights Out Flip) */
         function onNodeClick(idx, size) {
             if (gameState.isWon || gameState.moves <= 0) return;
 
             const targetNode = gameState.grid[idx];
             
+            // 綠色 Static 節點無法直接點擊
             if (targetNode.type === 'static') {
                 updateStatusBanner("🔒 綠色節點已被錨定鎖定，無法直接點擊！請利用周圍連鎖翻轉。", true);
                 return;
             }
 
+            // 計算點擊座標
             const x = idx % size;
             const y = Math.floor(idx / size);
 
+            // 翻轉目標與其十字相鄰 4 個節點 (上、下、左、右)
             const neighborsToFlip = [
-                { x: x, y: y },
-                { x: x, y: y - 1 },
-                { x: x, y: y + 1 },
-                { x: x - 1, y: y },
-                { x: x + 1, y: y }
+                { x: x, y: y },        // 自己
+                { x: x, y: y - 1 },    // 上
+                { x: x, y: y + 1 },    // 下
+                { x: x - 1, y: y },    // 左
+                { x: x + 1, y: y }     // 右
             ];
 
             neighborsToFlip.forEach(pos => {
                 if (pos.x >= 0 && pos.x < size && pos.y >= 0 && pos.y < size) {
                     const nIdx = pos.y * size + pos.x;
+                    // 翻轉狀態 (0 -> 1, 1 -> 0)
                     gameState.grid[nIdx].state = gameState.grid[nIdx].state === 1 ? 0 : 1;
                 }
             });
 
+            // 紫色侵蝕節點精準扣 2 步
             if (targetNode.type === 'corrupted') {
                 gameState.moves -= 2;
                 audio.playCorruptedSound();
@@ -735,10 +742,14 @@
 
             if (gameState.moves < 0) gameState.moves = 0;
 
+            // 更新畫面所有節點 DOM 狀態
             refreshBoardDOM();
             updateHUD();
+
+            // 檢查是否全亮 (通關)
             checkWinCondition();
 
+            // 檢查失敗
             if (gameState.moves <= 0 && !gameState.isWon) {
                 setTimeout(() => openModal('failModal'), 400);
             }
@@ -770,6 +781,7 @@
             }, 300);
         }
 
+        /* 檢查是否所有燈都被點亮 */
         function checkWinCondition() {
             const totalNodes = gameState.grid.length;
             const onNodes = gameState.grid.filter(n => n.state === 1).length;
@@ -780,6 +792,7 @@
                 gameState.isWon = true;
                 audio.playWinFanfare();
 
+                // 清除跳過標記
                 const bypassedIndex = gameState.bypassedLevels.indexOf(gameState.currentLevelIndex);
                 if (bypassedIndex !== -1) gameState.bypassedLevels.splice(bypassedIndex, 1);
 
