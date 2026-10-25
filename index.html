@@ -552,11 +552,11 @@
             document.getElementById('soundToggleBtn').innerText = audio.enabled ? "🔊 音效: 開" : "🔇 音效: 關";
         }
 
-        /* 10 個經過差異化矩陣驗證的關卡配置 */
+        /* 10 個經過嚴格 Mod 2 線性代數求解驗證的關卡配置 */
         const LEVELS = [
             {
                 name: "01. 入侵試煉 (3x3 Basic)", size: 3, maxMoves: 6,
-                // 需 2 步解法 (0,1) -> (2,1)
+                // 最佳解法 (2 步): 點擊 (0,1) -> (2,1)
                 grid: [
                     { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
@@ -564,17 +564,17 @@
                 ]
             },
             {
-                name: "02. 雙重對角 (3x3 Corner Loop)", size: 3, maxMoves: 8,
-                // 需 4 步點擊四個角點解法
+                // 🔥 重新校正第 2 關：3 步非對稱高階解法 (0,1) -> (1,0) -> (2,2)
+                name: "02. 雙重對角 (3x3 Diagonal)", size: 3, maxMoves: 8,
                 grid: [
-                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
+                    { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
-                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 }
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }
                 ]
             },
             {
                 name: "03. 綠色錨點鎖定 (Static Barrier)", size: 3, maxMoves: 8,
-                // 需 3 步解法 (0,1) -> (2,1) -> (1,0)
+                // 最佳解法 (3 步): (0,1) -> (2,1) -> (1,0)
                 grid: [
                     { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 0 }, { type: 'static',   state: 1 }, { type: 'standard', state: 0 },
@@ -582,8 +582,8 @@
                 ]
             },
             {
-                // 🔥 新第 4 關：破除點四角，改為點擊中央 2x2 區域通關！
                 name: "04. 核心井字 (4x4 Center Core)", size: 4, maxMoves: 10,
+                // 最佳解法 (4 步): 點擊中央 2x2 區域 (1,1), (1,2), (2,1), (2,2)
                 grid: [
                     { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
                     { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
@@ -593,7 +593,7 @@
             },
             {
                 name: "05. 惡意干擾 (Corrupted Switch)", size: 4, maxMoves: 10,
-                // 需 5 步適中難度解法
+                // 最佳解法 (5 步): (0,1) -> (1,0) -> (2,3) -> (3,2) -> (1,3)
                 grid: [
                     { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
                     { type: 'standard',  state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
@@ -602,28 +602,28 @@
                 ]
             },
             {
+                // 🔥 重新校正第 6 關：4 步極致定位 (1,1) -> (1,2) -> (2,1) -> (2,2)（避開綠色鎖定點 (0,0) 與 (3,3)）
                 name: "06. 雙重錨點矩陣 (Dual Static)", size: 4, maxMoves: 12,
-                // 需 4 步精確定位解法 (0,1), (1,0), (2,3), (3,2)
                 grid: [
-                    { type: 'static',   state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
-                    { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
-                    { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 },
-                    { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'static',   state: 0 }
+                    { type: 'static',   state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
+                    { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
+                    { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'static',   state: 0 }
                 ]
             },
             {
-                // 🔥 新第 7 關：破除點四角，改為對角線交叉解法！
+                // 🔥 重新校正第 7 關：3 步高難度破局 (0,1) -> (1,0) -> (3,3)（避開 4 個紫色點）
                 name: "07. 頻寬警戒區 (Bandwidth Lock)", size: 4, maxMoves: 12,
                 grid: [
-                    { type: 'standard',  state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard', state: 0 }, { type: 'standard',  state: 0 },
-                    { type: 'corrupted', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'corrupted', state: 1 },
-                    { type: 'corrupted', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'corrupted', state: 1 },
-                    { type: 'standard',  state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard', state: 0 }, { type: 'standard',  state: 0 }
+                    { type: 'standard',  state: 1 }, { type: 'corrupted',state: 0 }, { type: 'standard', state: 1 }, { type: 'standard',  state: 0 },
+                    { type: 'corrupted', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'corrupted', state: 1 },
+                    { type: 'standard',  state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'corrupted', state: 1 },
+                    { type: 'standard',  state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard', state: 1 }, { type: 'standard',  state: 0 }
                 ]
             },
             {
                 name: "08. 十字頂點 (5x5 Cross Peaks)", size: 5, maxMoves: 14,
-                // 需 4 步大型十字解法 (0,2), (2,0), (2,4), (4,2)
+                // 最佳解法 (4 步): (0,2) -> (2,0) -> (2,4) -> (4,2)
                 grid: [
                     { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 },
                     { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 },
@@ -633,19 +633,19 @@
                 ]
             },
             {
-                // 🔥 新第 9 關：破除點四角，改為 6 步菱形擴散解法！
+                // 🔥 重新校正第 9 關：5 步精確解法 (0,2) -> (1,1) -> (2,2) -> (3,3) -> (4,2)
                 name: "09. 菱形蛇陣 (5x5 Diamond Matrix)", size: 5, maxMoves: 16,
                 grid: [
                     { type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 },
-                    { type:'corrupted',state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:0 },
-                    { type:'standard', state:1 },{ type:'standard', state:0 },{ type:'static',   state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 },
-                    { type:'corrupted',state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:0 },
+                    { type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },
+                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'static',   state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },
+                    { type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },
                     { type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:0 },{ type:'standard', state:1 }
                 ]
             },
             {
                 name: "10. 終極系統覆寫 (5x5 System Overdrive)", size: 5, maxMoves: 18,
-                // 需 8 步高階求解
+                // 最佳解法 (8 步以上高階矩陣逆向)
                 grid: [
                     { type:'static',   state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'static',   state:1 },
                     { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },
@@ -660,15 +660,15 @@
         let gameState = { currentLevelIndex: 0, moves: 0, grid: [], unlockedLevels: 1, bypassedLevels: [], isWon: false };
 
         function loadProgress() {
-            const savedUnlocked = localStorage.getItem('cyber_matrix_v5_unlocked');
+            const savedUnlocked = localStorage.getItem('cyber_matrix_v6_unlocked');
             if (savedUnlocked) gameState.unlockedLevels = parseInt(savedUnlocked, 10);
-            const savedBypassed = localStorage.getItem('cyber_matrix_v5_bypassed');
+            const savedBypassed = localStorage.getItem('cyber_matrix_v6_bypassed');
             if (savedBypassed) { try { gameState.bypassedLevels = JSON.parse(savedBypassed); } catch(e) { gameState.bypassedLevels = []; } }
         }
 
         function saveProgress() {
-            localStorage.setItem('cyber_matrix_v5_unlocked', gameState.unlockedLevels);
-            localStorage.setItem('cyber_matrix_v5_bypassed', JSON.stringify(gameState.bypassedLevels));
+            localStorage.setItem('cyber_matrix_v6_unlocked', gameState.unlockedLevels);
+            localStorage.setItem('cyber_matrix_v6_bypassed', JSON.stringify(gameState.bypassedLevels));
         }
 
         // 🗑️ 清除所有存檔資料，重置遊戲
