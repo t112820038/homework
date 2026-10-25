@@ -593,11 +593,11 @@
             },
             {
                 // 🔥 演算法嚴格校正：最少必須花 6 步通關（100% 無更短解法）
-                name: "05. 核心警戒區 (Core Lock)", size: 4, maxMoves: 12,
+                name: "05. 核心警戒區 (Core Lock)", size: 4, maxMoves: 10,
                 grid: [
-                    { type: 'standard',  state: 0 }, { type: 'standard',  state: 0 }, { type: 'standard',  state: 0 }, { type: 'standard',  state: 0 },
-                    { type: 'standard',  state: 1 }, { type: 'corrupted', state: 1 }, { type: 'standard',  state: 1 }, { type: 'standard',  state: 1 },
-                    { type: 'standard',  state: 0 }, { type: 'standard',  state: 1 }, { type: 'corrupted', state: 1 }, { type: 'standard',  state: 0 },
+                    { type: 'corrupted',  state: 0 }, { type: 'standard',  state: 0 }, { type: 'standard',  state: 0 }, { type: 'corrupted',  state: 0 },
+                    { type: 'standard',  state: 1 }, { type: 'standard', state: 1 }, { type: 'standard',  state: 1 }, { type: 'standard',  state: 1 },
+                    { type: 'corrupted',  state: 0 }, { type: 'standard',  state: 1 }, { type: 'standard', state: 1 }, { type: 'corrupted',  state: 0 },
                     { type: 'standard',  state: 1 }, { type: 'standard',  state: 1 }, { type: 'standard',  state: 1 }, { type: 'standard',  state: 1 }
                 ]
             },
