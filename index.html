@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER HACK // 節點覆寫</title>
+    <title>CYBER MATRIX // 矩陣點燈覆寫</title>
+    <!-- 引入賽博風格科技字型 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-base: #080711;
+            --bg-base: #06050d;
             --cyan: #00f0ff;
             --magenta: #ff007f;
             --yellow: #ffe600;
             --green: #00ff66;
-            --purple: #a100ff;
-            --dark-surface: #100e26;
-            --font-tech: 'Courier New', Courier, monospace;
+            --purple: #b026ff;
+            --dark-surface: rgba(16, 14, 38, 0.9);
+            --font-tech: 'Share Tech Mono', 'Courier New', monospace;
+            --font-title: 'Orbitron', sans-serif;
         }
 
         * {
@@ -35,22 +41,22 @@
             justify-content: flex-start;
             overflow-x: hidden;
             position: relative;
-            padding-bottom: 20px;
+            padding-bottom: 25px;
         }
 
-        /* Scanlines Overlay */
+        /* Scanlines CRT 螢幕掃描線 */
         body::before {
             content: " ";
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
             z-index: 100;
             background-size: 100% 3px, 6px 100%;
             pointer-events: none;
         }
 
-        /* Glitch Flash Animation for Bypass & Corrupted */
+        /* Glitch Flash 動畫 */
         @keyframes glitch-flash {
             0% { filter: invert(0); }
             20% { filter: invert(0.8) hue-rotate(90deg); }
@@ -58,11 +64,8 @@
             60% { filter: invert(0.5) hue-rotate(180deg); }
             100% { filter: invert(0); }
         }
-        .bypass-flash {
-            animation: glitch-flash 0.3s ease-out;
-        }
+        .bypass-flash { animation: glitch-flash 0.3s ease-out; }
 
-        /* Glitch Animation for Header */
         @keyframes glitch {
             0% { text-shadow: 2px 0 var(--magenta), -2px 0 var(--cyan); }
             25% { text-shadow: -2px 0 var(--magenta), 2px 0 var(--cyan); }
@@ -71,19 +74,19 @@
             100% { text-shadow: 2px 0 var(--magenta), -2px 0 var(--cyan); }
         }
 
-        /* HUD Container */
+        /* HUD 控制面板 */
         .hud-container {
             width: 95%;
-            max-width: 600px;
+            max-width: 550px;
             margin-top: 15px;
-            background: rgba(16, 14, 38, 0.85);
+            background: var(--dark-surface);
             border: 1px solid var(--cyan);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.25), inset 0 0 15px rgba(0, 240, 255, 0.1);
             padding: 12px 18px;
             clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .header-main {
@@ -91,21 +94,22 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(0, 240, 255, 0.3);
-            padding-bottom: 6px;
+            padding-bottom: 8px;
         }
 
         .title {
-            font-size: clamp(1.1rem, 4vw, 1.5rem);
-            font-weight: bold;
-            letter-spacing: 2px;
+            font-family: var(--font-title);
+            font-size: clamp(1.2rem, 4.5vw, 1.6rem);
+            font-weight: 900;
+            letter-spacing: 3px;
             color: #fff;
-            animation: glitch 2.5s infinite alternate;
+            animation: glitch 3s infinite alternate;
         }
 
         .subtitle {
             font-size: 0.65rem;
             color: var(--magenta);
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
         }
 
@@ -113,7 +117,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: clamp(0.8rem, 3vw, 1rem);
         }
 
         .stat-box {
@@ -122,281 +125,222 @@
         }
 
         .stat-label {
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             color: rgba(0, 240, 255, 0.7);
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .stat-value {
+            font-family: var(--font-title);
             font-size: clamp(1rem, 3.5vw, 1.3rem);
             font-weight: bold;
             color: #fff;
             text-shadow: 0 0 8px var(--cyan);
-            transition: color 0.2s, text-shadow 0.2s;
         }
 
-        .stat-value.warning {
-            color: var(--yellow);
-            text-shadow: 0 0 8px var(--yellow);
-        }
+        .stat-value.warning { color: var(--yellow); text-shadow: 0 0 8px var(--yellow); }
+        .stat-value.danger { color: var(--magenta); text-shadow: 0 0 8px var(--magenta); }
 
-        .stat-value.danger {
-            color: var(--magenta);
-            text-shadow: 0 0 8px var(--magenta);
-        }
-
-        /* Control Buttons Top Bar */
         .top-controls {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
             justify-content: flex-end;
         }
 
         .cyber-btn {
-            background: transparent;
+            background: rgba(0, 240, 255, 0.05);
             border: 1px solid var(--cyan);
             color: var(--cyan);
             font-family: var(--font-tech);
             font-size: 0.75rem;
-            padding: 5px 10px;
+            padding: 6px 10px;
             cursor: pointer;
             transition: all 0.2s ease;
             clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
 
         .cyber-btn:hover {
             background: var(--cyan);
             color: #000;
-            box-shadow: 0 0 10px var(--cyan);
+            box-shadow: 0 0 12px var(--cyan);
         }
 
-        .cyber-btn.btn-magenta {
-            border-color: var(--magenta);
-            color: var(--magenta);
-        }
-        .cyber-btn.btn-magenta:hover {
-            background: var(--magenta);
-            color: #000;
-            box-shadow: 0 0 10px var(--magenta);
-        }
+        .cyber-btn.btn-magenta { border-color: var(--magenta); color: var(--magenta); }
+        .cyber-btn.btn-magenta:hover { background: var(--magenta); color: #000; box-shadow: 0 0 12px var(--magenta); }
 
-        .cyber-btn.btn-yellow {
-            border-color: var(--yellow);
-            color: var(--yellow);
-        }
-        .cyber-btn.btn-yellow:hover {
-            background: var(--yellow);
-            color: #000;
-            box-shadow: 0 0 10px var(--yellow);
-        }
+        .cyber-btn.btn-yellow { border-color: var(--yellow); color: var(--yellow); }
+        .cyber-btn.btn-yellow:hover { background: var(--yellow); color: #000; box-shadow: 0 0 12px var(--yellow); }
 
-        /* Banner Messages */
+        /* 狀態跑馬燈 */
         .status-banner {
             width: 95%;
-            max-width: 600px;
-            margin: 8px 0;
-            padding: 8px;
-            font-size: 0.8rem;
+            max-width: 550px;
+            margin: 10px 0;
+            padding: 8px 12px;
+            font-size: 0.85rem;
             text-align: center;
-            background: rgba(0, 0, 0, 0.6);
-            border-left: 3px solid var(--cyan);
+            background: rgba(0, 0, 0, 0.7);
+            border-left: 4px solid var(--cyan);
             letter-spacing: 1px;
-            min-height: 36px;
+            min-height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
-        /* Board Container & Grid System */
+        /* 遊戲棋盤區塊 */
         .board-wrapper {
             position: relative;
             width: 95%;
-            max-width: 500px;
+            max-width: 480px;
             aspect-ratio: 1 / 1;
-            margin: 10px 0;
+            margin: 5px 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle, rgba(16,14,38,0.9) 0%, rgba(8,7,17,0.95) 100%);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 0, 0, 0.5);
-            padding: 10px;
+            background: radial-gradient(circle, rgba(16,14,38,0.95) 0%, rgba(6,5,13,0.98) 100%);
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 240, 255, 0.15);
+            padding: 12px;
         }
 
         .grid-container {
             display: grid;
             width: 100%;
             height: 100%;
-            gap: 8px;
+            gap: 10px;
         }
 
-        /* Node Styling */
+        /* 方塊與節點 - 亮暗燈模式 */
         .node {
             position: relative;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 4px;
+            background: rgba(16, 14, 38, 0.6);
+            border: 2px solid rgba(0, 240, 255, 0.2);
+            border-radius: 6px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: background 0.2s, border-color 0.2s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             touch-action: manipulation;
         }
 
         .node:hover {
             border-color: var(--cyan);
-            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+            transform: scale(1.03);
         }
 
-        .node-inner {
-            width: 80%;
-            height: 80%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.25s ease-out;
+        /* 暗燈狀態 (OFF) */
+        .node.off {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(0, 240, 255, 0.2);
         }
 
-        /* Laser Lines Inside Nodes */
-        .laser-line {
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.15);
-            transition: background-color 0.3s, box-shadow 0.3s;
+        .node.off .node-core {
+            width: 25%;
+            height: 25%;
+            background: rgba(0, 240, 255, 0.2);
+            border-radius: 4px;
+            transition: all 0.25s;
         }
 
-        .laser-line.active {
-            background-color: var(--cyan);
-            box-shadow: 0 0 8px var(--cyan), 0 0 12px var(--cyan);
-        }
-
-        /* Directional Line Styles */
-        .laser-line.top { top: 0; left: 50%; width: 4px; height: 50%; transform: translateX(-50%); }
-        .laser-line.bottom { bottom: 0; left: 50%; width: 4px; height: 50%; transform: translateX(-50%); }
-        .laser-line.left { left: 0; top: 50%; width: 50%; height: 4px; transform: translateY(-50%); }
-        .laser-line.right { right: 0; top: 50%; width: 50%; height: 4px; transform: translateY(-50%); }
-
-        .node-center {
-            width: 14px;
-            height: 14px;
-            background: #100e26;
-            border: 2px solid var(--cyan);
-            border-radius: 50%;
-            z-index: 2;
-            transition: all 0.3s;
-        }
-
-        .node.powered .node-center {
-            background: var(--cyan);
-            box-shadow: 0 0 10px var(--cyan);
-        }
-
-        /* Node Special Types */
-        .node.source {
+        /* 亮燈狀態 (ON) */
+        .node.on {
+            background: rgba(0, 240, 255, 0.18);
             border-color: var(--cyan);
-            background: rgba(0, 240, 255, 0.15);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(0, 240, 255, 0.3);
         }
-        .node.source .node-center {
+
+        .node.on .node-core {
+            width: 60%;
+            height: 60%;
             background: var(--cyan);
-            box-shadow: 0 0 12px var(--cyan);
-            animation: pulse 1.5s infinite alternate;
+            box-shadow: 0 0 15px var(--cyan);
+            border-radius: 4px;
+            transition: all 0.25s;
         }
 
-        .node.target {
-            border-color: var(--magenta);
-            background: rgba(255, 0, 127, 0.1);
-        }
-        .node.target .node-center {
-            border-color: var(--magenta);
-            background: #2b0018;
-        }
-        .node.target.powered {
-            background: rgba(255, 0, 127, 0.25);
-        }
-        .node.target.powered .node-center {
-            background: var(--magenta);
-            box-shadow: 0 0 15px var(--magenta);
-        }
-
-        /* Static / Locked Nodes */
+        /* 固定/鎖定節點 (Static) */
         .node.static {
             border-color: var(--green);
+            background: rgba(0, 255, 102, 0.08);
             cursor: not-allowed;
-            background: rgba(0, 255, 102, 0.05);
+        }
+        .node.static.on {
+            background: rgba(0, 255, 102, 0.25);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+        }
+        .node.static.on .node-core {
+            background: var(--green);
+            box-shadow: 0 0 12px var(--green);
         }
         .node.static::after {
             content: "🔒";
             position: absolute;
-            font-size: 0.6rem;
-            top: 2px;
-            right: 2px;
-            opacity: 0.7;
+            font-size: 0.75rem;
+            top: 4px;
+            right: 4px;
+            opacity: 0.8;
         }
 
-        /* Corrupted / Purple Nodes */
+        /* 紫色侵蝕節點 (Corrupted - 扣雙倍步數) */
         .node.corrupted {
             border-color: var(--purple);
-            background: rgba(161, 0, 255, 0.1);
+            background: rgba(176, 38, 255, 0.1);
         }
-        .node.corrupted .node-center {
-            border-color: var(--purple);
+        .node.corrupted.on {
+            background: rgba(176, 38, 255, 0.3);
+            box-shadow: 0 0 18px rgba(176, 38, 255, 0.6);
+        }
+        .node.corrupted.on .node-core {
+            background: var(--purple);
+            box-shadow: 0 0 15px var(--purple);
         }
         .node.corrupted::after {
             content: "⚠️";
             position: absolute;
-            font-size: 0.6rem;
-            top: 2px;
-            right: 2px;
+            font-size: 0.75rem;
+            top: 4px;
+            right: 4px;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(0.9); opacity: 0.8; }
-            100% { transform: scale(1.15); opacity: 1; }
-        }
-
-        /* Modal Overlay */
+        /* Modal 彈出選單 */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(5px);
             z-index: 200;
             display: flex;
             justify-content: center;
             align-items: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.25s ease;
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
         .modal-card {
             width: 90%;
-            max-width: 480px;
+            max-width: 450px;
             background: var(--dark-surface);
             border: 2px solid var(--cyan);
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.35);
             padding: 20px;
             clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
             display: flex;
             flex-direction: column;
             gap: 15px;
-            max-height: 85vh;
-            overflow-y: auto;
         }
 
         .modal-title {
-            font-size: 1.3rem;
+            font-family: var(--font-title);
+            font-size: 1.1rem;
             color: #fff;
             border-bottom: 1px solid var(--cyan);
             padding-bottom: 8px;
@@ -405,26 +349,10 @@
             align-items: center;
         }
 
-        .modal-body {
-            font-size: 0.85rem;
-            line-height: 1.5;
-            color: rgba(255, 255, 255, 0.85);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        .modal-body { font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.85); }
+        .modal-body strong { color: var(--cyan); }
 
-        .modal-body strong {
-            color: var(--cyan);
-        }
-
-        /* Level Select Grid */
-        .level-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
+        .level-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px; }
 
         .level-btn {
             background: rgba(0, 240, 255, 0.05);
@@ -435,63 +363,28 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 1.1rem;
+            font-family: var(--font-title);
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            position: relative;
         }
 
-        .level-btn:hover:not(.locked) {
-            background: var(--cyan);
-            color: #000;
-            box-shadow: 0 0 10px var(--cyan);
-        }
-
-        .level-btn.completed {
-            border-color: var(--green);
-            color: var(--green);
-        }
-
-        .level-btn.bypassed {
-            border-color: var(--yellow);
-            color: var(--yellow);
-        }
-
-        .level-btn.locked {
-            border-color: rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.3);
-            cursor: not-allowed;
-        }
-
-        .level-badge {
-            font-size: 0.5rem;
-            margin-top: 2px;
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 480px) {
-            .hud-container {
-                padding: 8px 12px;
-            }
-            .level-grid {
-                grid-template-columns: repeat(5, 1fr);
-                gap: 6px;
-            }
-            .level-btn {
-                font-size: 0.9rem;
-            }
-        }
+        .level-btn:hover:not(.locked) { background: var(--cyan); color: #000; box-shadow: 0 0 10px var(--cyan); }
+        .level-btn.completed { border-color: var(--green); color: var(--green); }
+        .level-btn.bypassed { border-color: var(--yellow); color: var(--yellow); }
+        .level-btn.locked { border-color: rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.25); cursor: not-allowed; }
+        .level-badge { font-size: 0.55rem; margin-top: 2px; }
     </style>
 </head>
 <body>
 
-    <!-- HUD TOP CONTAINER -->
+    <!-- HUD 頂部面板 -->
     <div class="hud-container">
         <div class="header-main">
             <div>
-                <div class="title">CYBER HACK</div>
-                <div class="subtitle">SYSTEM NODE OVERRIDE // 節點覆寫</div>
+                <div class="title">CYBER MATRIX</div>
+                <div class="subtitle">LIGHTS OVERRIDE // 點燈覆寫</div>
             </div>
             <div class="top-controls">
                 <button class="cyber-btn" id="soundToggleBtn" onclick="toggleAudio()">🔊 音效: 開</button>
@@ -508,11 +401,11 @@
             </div>
             <div class="stat-box">
                 <span class="stat-label">剩餘頻寬 (步數)</span>
-                <span class="stat-value" id="hudMoves">15</span>
+                <span class="stat-value" id="hudMoves">10</span>
             </div>
             <div class="stat-box">
-                <span class="stat-label">目標覆寫</span>
-                <span class="stat-value" id="hudTargets">0 / 1</span>
+                <span class="stat-label">點亮進度</span>
+                <span class="stat-value" id="hudTargets">0 / 9</span>
             </div>
             <div class="stat-box">
                 <button class="cyber-btn" onclick="restartLevel()">🔄 重置</button>
@@ -520,17 +413,17 @@
         </div>
     </div>
 
-    <!-- STATUS BANNER -->
+    <!-- 跑馬燈 -->
     <div class="status-banner" id="statusBanner">
-        [系統初始化] - 請旋轉節點導通傳輸線，連線至目標核心...
+        [矩陣初始化] - 點擊方塊觸發十字連鎖翻轉，將所有燈點亮！
     </div>
 
-    <!-- MAIN BOARD WRAPPER -->
+    <!-- 主棋盤區 -->
     <div class="board-wrapper">
         <div class="grid-container" id="gridContainer"></div>
     </div>
 
-    <!-- MODAL: LEVEL SELECT -->
+    <!-- 選關 Modal -->
     <div class="modal-overlay" id="levelModal">
         <div class="modal-card">
             <div class="modal-title">
@@ -538,54 +431,52 @@
                 <button class="cyber-btn" onclick="closeModal('levelModal')">✕</button>
             </div>
             <div class="modal-body">
-                <p>選擇已解鎖的網路節點開展入侵行動：</p>
+                <p>選擇已解鎖的網絡矩陣進行點燈破解：</p>
                 <div class="level-grid" id="levelGrid"></div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: GAME GUIDE -->
+    <!-- 指南 Modal -->
     <div class="modal-overlay" id="guideModal">
         <div class="modal-card">
             <div class="modal-title">
-                <span>入侵指南 / MANUAL</span>
+                <span>點燈規則 / LIGHTS OUT RULES</span>
                 <button class="cyber-btn" onclick="closeModal('guideModal')">✕</button>
             </div>
             <div class="modal-body">
-                <p><strong>[任務目標]</strong><br>旋轉矩陣中的傳輸節點，將藍色「發射源」發出的數據光束傳遞至所有粉色「目標核心」。</p>
-                <p><strong>[節點類型說明]</strong><br>
-                • <span style="color:var(--cyan)">藍色節點 (Source/Standard)</span>：發射源或一般轉接點，點擊順時針旋轉 90 度。<br>
-                • <span style="color:var(--magenta)">粉色節點 (Target)</span>：需要接收訊號的目標核心，全點亮即可獲勝。<br>
-                • <span style="color:var(--green)">綠色節點 (Static)</span>：固定錨點，<b>無法旋轉</b>，只能改變周圍路線引導光束。<br>
-                • <span style="color:var(--purple)">紫色節點 (Corrupted)</span>：<b>惡意侵蝕節點！點擊會直接扣除 2 倍步數</b>，請謹慎點擊或規劃繞道。
+                <p><strong>[通關目標]</strong><br>在步數限制內，<b>將矩陣中的每一個方塊全部點亮（霓虹藍狀態）</b>。</p>
+                <p style="margin-top:8px;"><strong>[十字連鎖翻轉機制]</strong><br>
+                • 點擊任意一個方塊時，<b>該方塊本身以及其「上下左右」4 個相鄰方塊</b>會同時切換亮/暗狀態（亮變暗，暗變亮）。<br>
+                • <span style="color:var(--green)">綠色鎖定節點 (Static)</span>：<b>無法直接點擊</b>，只能靠點擊周圍的相鄰節點來帶動翻轉。<br>
+                • <span style="color:var(--purple)">紫色侵蝕節點 (Corrupted)</span>：<b>點擊會直接懲罰性扣除 2 步</b>！請精準規劃點擊順序。
                 </p>
-                <p><strong>[跳過關卡機制]</strong><br>若卡關，可使用頂部 <span style="color:var(--yellow)">⚠️ 跳過</span> 按鈕強行繞過當前網絡區域。</p>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: LEVEL WIN -->
+    <!-- 勝利 Modal -->
     <div class="modal-overlay" id="winModal">
         <div class="modal-card" style="text-align: center;">
             <div class="modal-title" style="color: var(--green); justify-content: center;">
-                <span>OVERRIDE SUCCESSFUL // 覆寫成功</span>
+                <span>MATRIX OVERRIDDEN // 矩陣完全覆寫</span>
             </div>
             <div class="modal-body" style="align-items: center;">
                 <p id="winMessage" style="font-size: 1.1rem; color: #fff;"></p>
-                <p id="winStats" style="color: var(--cyan);"></p>
+                <p id="winStats" style="color: var(--cyan); margin-top: 5px;"></p>
                 <button class="cyber-btn" style="margin-top: 15px; width: 80%; padding: 10px;" onclick="nextLevel()">前往下一關卡 ▶</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: LEVEL FAIL -->
+    <!-- 失敗 Modal -->
     <div class="modal-overlay" id="failModal">
         <div class="modal-card" style="text-align: center; border-color: var(--magenta);">
             <div class="modal-title" style="color: var(--magenta); justify-content: center;">
                 <span>SYSTEM LOCKOUT // 步數耗盡</span>
             </div>
             <div class="modal-body" style="align-items: center;">
-                <p>防火牆已被觸發，頻寬耗盡！連線傳輸中斷。</p>
+                <p>頻寬耗盡！未能於限制步數內將矩陣完全點亮。</p>
                 <div style="display:flex; gap: 10px; width:100%; margin-top: 15px;">
                     <button class="cyber-btn" style="flex:1; padding: 10px;" onclick="restartLevel()">重試本關</button>
                     <button class="cyber-btn btn-yellow" style="flex:1; padding: 10px;" onclick="bypassCurrentLevel()">⚠️ 跳過此關</button>
@@ -595,97 +486,59 @@
     </div>
 
     <script>
-        /* Web Audio API Synth Generator */
+        /* Web Audio API 音效引擎 */
         class AudioSynth {
-            constructor() {
-                this.ctx = null;
-                this.enabled = true;
-            }
+            constructor() { this.ctx = null; this.enabled = true; }
+            init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
 
-            init() {
-                if (!this.ctx) {
-                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-            }
-
-            playRotateSound() {
-                if (!this.enabled) return;
-                this.init();
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
+            playToggleSound(isOn) {
+                if (!this.enabled) return; this.init();
+                const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(400, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.05);
-                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.05);
-            }
-
-            playPowerSound() {
-                if (!this.enabled) return;
-                this.init();
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(200, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(600, this.ctx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.15);
+                const startFreq = isOn ? 300 : 600;
+                const endFreq = isOn ? 700 : 250;
+                osc.frequency.setValueAtTime(startFreq, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(endFreq, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.08);
             }
 
             playCorruptedSound() {
-                if (!this.enabled) return;
-                this.init();
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
+                if (!this.enabled) return; this.init();
+                const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-                osc.frequency.linearRampToValueAtTime(60, this.ctx.currentTime + 0.2);
+                osc.frequency.setValueAtTime(160, this.ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(50, this.ctx.currentTime + 0.22);
                 gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.2);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.22);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.22);
             }
 
             playBypassGlitch() {
-                if (!this.enabled) return;
-                this.init();
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
+                if (!this.enabled) return; this.init();
+                const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-                osc.frequency.setValueAtTime(200, this.ctx.currentTime + 0.05);
-                osc.frequency.setValueAtTime(600, this.ctx.currentTime + 0.1);
+                osc.frequency.setValueAtTime(750, this.ctx.currentTime);
+                osc.frequency.setValueAtTime(200, this.ctx.currentTime + 0.06);
+                osc.frequency.setValueAtTime(600, this.ctx.currentTime + 0.12);
                 gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.25);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.25);
             }
 
             playWinFanfare() {
-                if (!this.enabled) return;
-                this.init();
-                const notes = [440, 554.37, 659.25, 880];
-                notes.forEach((freq, i) => {
-                    const osc = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
+                if (!this.enabled) return; this.init();
+                [440, 554.37, 659.25, 880].forEach((freq, i) => {
+                    const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
                     osc.type = 'square';
                     osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.08);
-                    gain.gain.setValueAtTime(0.1, this.ctx.currentTime + i * 0.08);
+                    gain.gain.setValueAtTime(0.08, this.ctx.currentTime + i * 0.08);
                     gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + i * 0.08 + 0.25);
-                    osc.connect(gain);
-                    gain.connect(this.ctx.destination);
+                    osc.connect(gain); gain.connect(this.ctx.destination);
                     osc.start(this.ctx.currentTime + i * 0.08);
                     osc.stop(this.ctx.currentTime + i * 0.08 + 0.25);
                 });
@@ -693,299 +546,134 @@
         }
 
         const audio = new AudioSynth();
-
         function toggleAudio() {
             audio.enabled = !audio.enabled;
             document.getElementById('soundToggleBtn').innerText = audio.enabled ? "🔊 音效: 開" : "🔇 音效: 關";
         }
 
-        /* 10 LEVELS DEFINITION */
+        /* 10 個經典點燈關卡 (Lights Out Matrix) */
         const LEVELS = [
             {
-                name: "01. 網路接入 (Access Point)",
-                size: 3,
-                maxMoves: 6,
-                nodes: [
-                    { x:0, y:0, type:'source', connections:[0,1,0,0], rot:1 },
-                    { x:1, y:0, type:'standard', connections:[0,1,0,1], rot:0 },
-                    { x:2, y:0, type:'target', connections:[0,0,0,1], rot:2 },
-                    { x:0, y:1, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:1, type:'standard', connections:[1,1,0,0], rot:1 },
-                    { x:2, y:1, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:0, y:2, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:2, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:2, type:'empty', connections:[0,0,0,0], rot:0 }
+                name: "01. 入侵試煉 (3x3 Basic)", size: 3, maxMoves: 6,
+                // state: 1 表示亮 (ON)，0 表示暗 (OFF)
+                grid: [
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
+                    { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 },
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 }
                 ]
             },
             {
-                name: "02. 數據過載 (Data Surge)",
-                size: 3,
-                maxMoves: 8,
-                nodes: [
-                    { x:0, y:0, type:'source', connections:[0,1,1,0], rot:0 },
-                    { x:1, y:0, type:'standard', connections:[0,1,0,1], rot:1 },
-                    { x:2, y:0, type:'target', connections:[0,0,1,1], rot:3 },
-                    { x:0, y:1, type:'standard', connections:[1,1,0,0], rot:2 },
-                    { x:1, y:1, type:'standard', connections:[1,1,1,1], rot:0 },
-                    { x:2, y:1, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:0, y:2, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:2, type:'target', connections:[1,0,0,1], rot:0 },
-                    { x:2, y:2, type:'empty', connections:[0,0,0,0], rot:0 }
+                name: "02. 雙重對角 (3x3 Diagonal)", size: 3, maxMoves: 8,
+                grid: [
+                    { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 },
+                    { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }
                 ]
             },
             {
-                name: "03. 防火牆障礙 (Firewall Static)",
-                size: 3,
-                maxMoves: 7,
-                nodes: [
-                    { x:0, y:0, type:'source', connections:[0,1,0,0], rot:0 },
-                    { x:1, y:0, type:'static', connections:[0,1,1,1], rot:0 },
-                    { x:2, y:0, type:'standard', connections:[0,0,1,1], rot:1 },
-                    { x:0, y:1, type:'standard', connections:[1,0,1,0], rot:1 },
-                    { x:1, y:1, type:'standard', connections:[1,1,0,0], rot:3 },
-                    { x:2, y:1, type:'target', connections:[1,0,0,1], rot:0 },
-                    { x:0, y:2, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:2, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:2, type:'empty', connections:[0,0,0,0], rot:0 }
+                name: "03. 綠色錨點鎖定 (Static Barrier)", size: 3, maxMoves: 7,
+                grid: [
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
+                    { type: 'standard', state: 1 }, { type: 'static',   state: 0 }, { type: 'standard', state: 1 },
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 }
                 ]
             },
             {
-                name: "04. 雙向中繼 (Dual Relay)",
-                size: 4,
-                maxMoves: 12,
-                nodes: [
-                    { x:0, y:0, type:'source', connections:[0,1,1,0], rot:0 },
-                    { x:1, y:0, type:'standard', connections:[0,1,0,1], rot:0 },
-                    { x:2, y:0, type:'standard', connections:[0,1,0,1], rot:1 },
-                    { x:3, y:0, type:'target', connections:[0,0,1,1], rot:2 },
-                    { x:0, y:1, type:'standard', connections:[1,0,1,0], rot:1 },
-                    { x:1, y:1, type:'static', connections:[1,1,1,0], rot:0 },
-                    { x:2, y:1, type:'standard', connections:[0,1,1,1], rot:2 },
-                    { x:3, y:1, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:0, y:2, type:'standard', connections:[1,1,0,0], rot:0 },
-                    { x:1, y:2, type:'standard', connections:[0,1,0,1], rot:1 },
-                    { x:2, y:2, type:'target', connections:[1,0,0,1], rot:3 },
-                    { x:3, y:2, type:'standard', connections:[1,0,0,1], rot:1 },
-                    { x:0, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:3, y:3, type:'empty', connections:[0,0,0,0], rot:0 }
+                name: "04. 十字防線 (4x4 Cross)", size: 4, maxMoves: 10,
+                grid: [
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
+                    { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
+                    { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 }
                 ]
             },
             {
-                name: "05. 核心解碼 (Core Decoding)",
-                size: 4,
-                maxMoves: 10,
-                nodes: [
-                    { x:0, y:0, type:'source', connections:[0,1,0,0], rot:0 },
-                    { x:1, y:0, type:'corrupted', connections:[0,1,1,1], rot:0 },
-                    { x:2, y:0, type:'standard', connections:[0,1,0,1], rot:1 },
-                    { x:3, y:0, type:'target', connections:[0,0,1,0], rot:0 },
-                    { x:0, y:1, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:1, y:1, type:'standard', connections:[1,1,0,1], rot:2 },
-                    { x:2, y:1, type:'static', connections:[0,1,1,1], rot:0 },
-                    { x:3, y:1, type:'standard', connections:[1,0,1,0], rot:1 },
-                    { x:0, y:2, type:'standard', connections:[1,1,0,0], rot:1 },
-                    { x:1, y:2, type:'target', connections:[0,1,1,0], rot:1 },
-                    { x:2, y:2, type:'standard', connections:[1,0,0,1], rot:2 },
-                    { x:3, y:2, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:0, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:3, y:3, type:'empty', connections:[0,0,0,0], rot:0 }
+                name: "05. 惡意干擾 (Corrupted Switch)", size: 4, maxMoves: 10,
+                grid: [
+                    { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
+                    { type: 'standard',  state: 0 }, { type: 'corrupted',state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
+                    { type: 'standard',  state: 0 }, { type: 'standard', state: 1 }, { type: 'corrupted',state: 0 }, { type: 'standard', state: 0 },
+                    { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 }
                 ]
             },
             {
-                name: "06. 惡意代碼侵蝕 (Corrupted Matrix)",
-                size: 4,
-                maxMoves: 14,
-                nodes: [
-                    { x:0, y:0, type:'source', connections:[0,1,1,0], rot:0 },
-                    { x:1, y:0, type:'corrupted', connections:[0,1,0,1], rot:1 },
-                    { x:2, y:0, type:'corrupted', connections:[0,1,1,1], rot:0 },
-                    { x:3, y:0, type:'target', connections:[0,0,1,1], rot:2 },
-                    { x:0, y:1, type:'standard', connections:[1,1,1,0], rot:3 },
-                    { x:1, y:1, type:'standard', connections:[0,1,0,1], rot:0 },
-                    { x:2, y:1, type:'standard', connections:[1,1,0,1], rot:1 },
-                    { x:3, y:1, type:'corrupted', connections:[1,0,1,0], rot:0 },
-                    { x:0, y:2, type:'standard', connections:[1,1,0,0], rot:2 },
-                    { x:1, y:2, type:'target', connections:[0,1,1,0], rot:0 },
-                    { x:2, y:2, type:'standard', connections:[0,1,1,1], rot:2 },
-                    { x:3, y:2, type:'target', connections:[1,0,0,1], rot:1 },
-                    { x:0, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:3, y:3, type:'empty', connections:[0,0,0,0], rot:0 }
+                name: "06. 雙重錨點矩陣 (Dual Static)", size: 4, maxMoves: 12,
+                grid: [
+                    { type: 'static',   state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'standard', state: 0 },
+                    { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
+                    { type: 'standard', state: 1 }, { type: 'standard', state: 0 }, { type: 'standard', state: 0 }, { type: 'standard', state: 1 },
+                    { type: 'standard', state: 0 }, { type: 'standard', state: 1 }, { type: 'standard', state: 1 }, { type: 'static',   state: 0 }
                 ]
             },
             {
-                name: "07. 頻寬限制 (Bandwidth Cap)",
-                size: 4,
-                maxMoves: 8,
-                nodes: [
-                    { x:0, y:0, type:'source', connections:[0,1,0,0], rot:1 },
-                    { x:1, y:0, type:'standard', connections:[0,1,0,1], rot:0 },
-                    { x:2, y:0, type:'static', connections:[0,1,1,1], rot:0 },
-                    { x:3, y:0, type:'target', connections:[0,0,1,0], rot:2 },
-                    { x:0, y:1, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:1, y:1, type:'corrupted', connections:[1,1,1,1], rot:0 },
-                    { x:2, y:1, type:'standard', connections:[1,0,1,0], rot:1 },
-                    { x:3, y:1, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:0, y:2, type:'standard', connections:[1,1,0,0], rot:3 },
-                    { x:1, y:2, type:'standard', connections:[1,1,0,1], rot:2 },
-                    { x:2, y:2, type:'standard', connections:[1,1,1,0], rot:0 },
-                    { x:3, y:2, type:'target', connections:[1,0,0,1], rot:3 },
-                    { x:0, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:3, y:3, type:'empty', connections:[0,0,0,0], rot:0 }
+                name: "07. 頻寬警戒區 (Bandwidth Lock)", size: 4, maxMoves: 8,
+                grid: [
+                    { type: 'standard',  state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard', state: 0 }, { type: 'standard',  state: 1 },
+                    { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'static',   state: 0 }, { type: 'standard',  state: 0 },
+                    { type: 'standard',  state: 0 }, { type: 'static',   state: 0 }, { type: 'standard', state: 0 }, { type: 'standard',  state: 1 },
+                    { type: 'standard',  state: 1 }, { type: 'standard', state: 0 }, { type: 'corrupted',state: 1 }, { type: 'standard',  state: 0 }
                 ]
             },
             {
-                name: "08. 量子糾纏 (Quantum Entanglement)",
-                size: 5,
-                maxMoves: 16,
-                nodes: [
-                    { x:0, y:0, type:'source', connections:[0,1,1,0], rot:0 },
-                    { x:1, y:0, type:'standard', connections:[0,1,0,1], rot:1 },
-                    { x:2, y:0, type:'corrupted', connections:[0,1,1,1], rot:0 },
-                    { x:3, y:0, type:'standard', connections:[0,1,0,1], rot:0 },
-                    { x:4, y:0, type:'target', connections:[0,0,1,1], rot:2 },
-                    { x:0, y:1, type:'standard', connections:[1,0,1,0], rot:1 },
-                    { x:1, y:1, type:'static', connections:[1,1,1,0], rot:0 },
-                    { x:2, y:1, type:'standard', connections:[1,1,0,1], rot:2 },
-                    { x:3, y:1, type:'static', connections:[0,1,1,1], rot:0 },
-                    { x:4, y:1, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:0, y:2, type:'target', connections:[1,1,0,0], rot:1 },
-                    { x:1, y:2, type:'standard', connections:[1,0,1,1], rot:3 },
-                    { x:2, y:2, type:'standard', connections:[0,1,1,1], rot:1 },
-                    { x:3, y:2, type:'standard', connections:[1,1,0,1], rot:0 },
-                    { x:4, y:2, type:'target', connections:[1,0,0,1], rot:0 },
-                    { x:0, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:3, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:4, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:0, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:3, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:4, y:4, type:'empty', connections:[0,0,0,0], rot:0 }
+                name: "08. 棋盤矩陣 (5x5 Checkerboard)", size: 5, maxMoves: 14,
+                grid: [
+                    { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:1 },
+                    { type:'standard',state:0 },{ type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:1 },{ type:'standard',state:0 },
+                    { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'static',  state:0 },{ type:'standard',state:0 },{ type:'standard',state:1 },
+                    { type:'standard',state:0 },{ type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:1 },{ type:'standard',state:0 },
+                    { type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:1 },{ type:'standard',state:0 },{ type:'standard',state:1 }
                 ]
             },
             {
-                name: "09. 黑客終端 (Hacker Mainframe)",
-                size: 5,
-                maxMoves: 18,
-                nodes: [
-                    { x:0, y:0, type:'source', connections:[0,1,0,0], rot:1 },
-                    { x:1, y:0, type:'standard', connections:[0,1,0,1], rot:0 },
-                    { x:2, y:0, type:'corrupted', connections:[0,1,1,1], rot:2 },
-                    { x:3, y:0, type:'standard', connections:[0,1,0,1], rot:1 },
-                    { x:4, y:0, type:'source', connections:[0,0,1,0], rot:2 },
-                    { x:0, y:1, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:1, y:1, type:'static', connections:[1,1,1,1], rot:0 },
-                    { x:2, y:1, type:'standard', connections:[1,1,0,1], rot:1 },
-                    { x:3, y:1, type:'corrupted', connections:[1,1,1,0], rot:3 },
-                    { x:4, y:1, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:0, y:2, type:'target', connections:[1,1,0,0], rot:0 },
-                    { x:1, y:2, type:'standard', connections:[1,0,1,1], rot:2 },
-                    { x:2, y:2, type:'target', connections:[1,1,1,1], rot:0 },
-                    { x:3, y:2, type:'standard', connections:[1,1,0,1], rot:1 },
-                    { x:4, y:2, type:'target', connections:[1,0,0,1], rot:3 },
-                    { x:0, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:3, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:4, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:0, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:3, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:4, y:4, type:'empty', connections:[0,0,0,0], rot:0 }
+                name: "09. 核心侵蝕區域 (5x5 Outbreak)", size: 5, maxMoves: 16,
+                grid: [
+                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },
+                    { type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },
+                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'static',   state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },
+                    { type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },
+                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 }
                 ]
             },
             {
-                name: "10. 系統核心覆寫 (System Overdrive)",
-                size: 5,
-                maxMoves: 20,
-                nodes: [
-                    { x:0, y:0, type:'source', connections:[0,1,1,0], rot:0 },
-                    { x:1, y:0, type:'corrupted', connections:[0,1,0,1], rot:1 },
-                    { x:2, y:0, type:'static', connections:[0,1,1,1], rot:0 },
-                    { x:3, y:0, type:'corrupted', connections:[0,1,0,1], rot:3 },
-                    { x:4, y:0, type:'target', connections:[0,0,1,1], rot:2 },
-                    { x:0, y:1, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:1, y:1, type:'standard', connections:[1,1,1,0], rot:2 },
-                    { x:2, y:1, type:'corrupted', connections:[1,1,1,1], rot:0 },
-                    { x:3, y:1, type:'standard', connections:[1,0,1,1], rot:1 },
-                    { x:4, y:1, type:'standard', connections:[1,0,1,0], rot:0 },
-                    { x:0, y:2, type:'target', connections:[1,1,0,0], rot:1 },
-                    { x:1, y:2, type:'standard', connections:[1,0,1,1], rot:0 },
-                    { x:2, y:2, type:'target', connections:[1,1,1,1], rot:0 },
-                    { x:3, y:2, type:'standard', connections:[1,1,0,1], rot:2 },
-                    { x:4, y:2, type:'target', connections:[1,0,0,1], rot:0 },
-                    { x:0, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:3, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:4, y:3, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:0, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:1, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:2, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:3, y:4, type:'empty', connections:[0,0,0,0], rot:0 },
-                    { x:4, y:4, type:'empty', connections:[0,0,0,0], rot:0 }
+                name: "10. 終極系統覆寫 (5x5 System Overdrive)", size: 5, maxMoves: 18,
+                grid: [
+                    { type:'static',   state:0 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'static',   state:0 },
+                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },
+                    { type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'corrupted',state:0 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },
+                    { type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },{ type:'standard', state:1 },{ type:'standard', state:0 },
+                    { type:'static',   state:0 },{ type:'standard', state:0 },{ type:'corrupted',state:1 },{ type:'standard', state:0 },{ type:'static',   state:0 }
                 ]
             }
         ];
 
-        /* Game State Management */
-        let gameState = {
-            currentLevelIndex: 0,
-            moves: 0,
-            grid: [],
-            unlockedLevels: 1,
-            bypassedLevels: [],
-            isWon: false
-        };
+        /* 遊戲狀態管理 */
+        let gameState = { currentLevelIndex: 0, moves: 0, grid: [], unlockedLevels: 1, bypassedLevels: [], isWon: false };
 
-        // Load progress from LocalStorage
         function loadProgress() {
-            const savedUnlocked = localStorage.getItem('cyber_hack_zh_unlocked');
+            const savedUnlocked = localStorage.getItem('cyber_matrix_unlocked');
             if (savedUnlocked) gameState.unlockedLevels = parseInt(savedUnlocked, 10);
-
-            const savedBypassed = localStorage.getItem('cyber_hack_zh_bypassed');
-            if (savedBypassed) {
-                try {
-                    gameState.bypassedLevels = JSON.parse(savedBypassed);
-                } catch(e) { gameState.bypassedLevels = []; }
-            }
+            const savedBypassed = localStorage.getItem('cyber_matrix_bypassed');
+            if (savedBypassed) { try { gameState.bypassedLevels = JSON.parse(savedBypassed); } catch(e) { gameState.bypassedLevels = []; } }
         }
 
         function saveProgress() {
-            localStorage.setItem('cyber_hack_zh_unlocked', gameState.unlockedLevels);
-            localStorage.setItem('cyber_hack_zh_bypassed', JSON.stringify(gameState.bypassedLevels));
+            localStorage.setItem('cyber_matrix_unlocked', gameState.unlockedLevels);
+            localStorage.setItem('cyber_matrix_bypassed', JSON.stringify(gameState.bypassedLevels));
         }
 
-        // Initialize Level
         function initLevel(index) {
             gameState.currentLevelIndex = index;
             const levelData = LEVELS[index];
             gameState.moves = levelData.maxMoves;
             gameState.isWon = false;
+            // 深拷貝矩陣狀態
+            gameState.grid = JSON.parse(JSON.stringify(levelData.grid));
 
-            // Deep clone nodes
-            gameState.grid = JSON.parse(JSON.stringify(levelData.nodes));
-
-            // Render Grid UI
             renderBoard(levelData.size);
             updateHUD();
-            evaluatePowerFlow();
-
-            updateStatusBanner(`[系統就緒] - 開啟章節: ${levelData.name}`);
+            updateStatusBanner(`[矩陣載入] - 章節: ${levelData.name}`);
         }
 
-        // Render Board
         function renderBoard(size) {
             const gridContainer = document.getElementById('gridContainer');
             gridContainer.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
@@ -994,76 +682,95 @@
 
             gameState.grid.forEach((node, idx) => {
                 const nodeEl = document.createElement('div');
-                nodeEl.className = `node ${node.type}`;
+                nodeEl.className = `node ${node.type} ${node.state === 1 ? 'on' : 'off'}`;
                 nodeEl.dataset.index = idx;
 
-                if (node.type !== 'empty') {
-                    const innerEl = document.createElement('div');
-                    innerEl.className = 'node-inner';
-                    innerEl.style.transform = `rotate(${node.rot * 90}deg)`;
+                const core = document.createElement('div');
+                core.className = 'node-core';
+                nodeEl.appendChild(core);
 
-                    // Render 4 directional lines (Top, Right, Bottom, Left)
-                    ['top', 'right', 'bottom', 'left'].forEach((dir, dirIdx) => {
-                        if (node.connections[dirIdx] === 1) {
-                            const line = document.createElement('div');
-                            line.className = `laser-line ${dir}`;
-                            innerEl.appendChild(line);
-                        }
-                    });
-
-                    const centerPoint = document.createElement('div');
-                    centerPoint.className = 'node-center';
-                    innerEl.appendChild(centerPoint);
-
-                    nodeEl.appendChild(innerEl);
-
-                    // Click & Touch Event
-                    nodeEl.addEventListener('click', () => onNodeClick(node));
-                }
+                // 綁定點擊事件
+                nodeEl.addEventListener('click', () => onNodeClick(idx, size));
 
                 gridContainer.appendChild(nodeEl);
             });
         }
 
-        // Handle Node Click
-        function onNodeClick(node) {
-            if (gameState.isWon || gameState.moves <= 0 || node.type === 'static' || node.type === 'empty') return;
+        /* 點擊觸發十字連鎖翻轉 (Lights Out Flip) */
+        function onNodeClick(idx, size) {
+            if (gameState.isWon || gameState.moves <= 0) return;
 
-            // Rotate node clockwise
-            node.rot = (node.rot + 1) % 4;
+            const targetNode = gameState.grid[idx];
             
-            // Check if Corrupted (Purple) Node clicked -> Consumes DOUBLE moves (2 Moves)
-            if (node.type === 'corrupted') {
-                gameState.moves -= 2; // Fixed double step deduction
+            // 綠色 Static 節點無法直接點擊
+            if (targetNode.type === 'static') {
+                updateStatusBanner("🔒 綠色節點已被錨定鎖定，無法直接點擊！請利用周圍連鎖翻轉。", true);
+                return;
+            }
+
+            // 計算點擊座標
+            const x = idx % size;
+            const y = Math.floor(idx / size);
+
+            // 翻轉目標與其十字相鄰 4 個節點 (上、下、左、右)
+            const neighborsToFlip = [
+                { x: x, y: y },        // 自己
+                { x: x, y: y - 1 },    // 上
+                { x: x, y: y + 1 },    // 下
+                { x: x - 1, y: y },    // 左
+                { x: x + 1, y: y }     // 右
+            ];
+
+            neighborsToFlip.forEach(pos => {
+                if (pos.x >= 0 && pos.x < size && pos.y >= 0 && pos.y < size) {
+                    const nIdx = pos.y * size + pos.x;
+                    // 翻轉狀態 (0 -> 1, 1 -> 0)
+                    gameState.grid[nIdx].state = gameState.grid[nIdx].state === 1 ? 0 : 1;
+                }
+            });
+
+            // 紫色侵蝕節點精準扣 2 步
+            if (targetNode.type === 'corrupted') {
+                gameState.moves -= 2;
                 audio.playCorruptedSound();
                 showCorruptedEffect();
                 updateStatusBanner("⚠️ 警告：觸發惡意侵蝕節點！頻寬雙倍消耗 (-2 步)", true);
             } else {
                 gameState.moves -= 1;
-                audio.playRotateSound();
+                audio.playToggleSound(targetNode.state === 1);
             }
 
-            // Prevent negative moves display
             if (gameState.moves < 0) gameState.moves = 0;
 
-            // Animate Node Rotation
-            const nodeEls = document.querySelectorAll('.node');
-            const targetEl = nodeEls[node.y * LEVELS[gameState.currentLevelIndex].size + node.x];
-            if (targetEl) {
-                const inner = targetEl.querySelector('.node-inner');
-                if (inner) inner.style.transform = `rotate(${node.rot * 90}deg)`;
-            }
-
+            // 更新畫面所有節點 DOM 狀態
+            refreshBoardDOM();
             updateHUD();
-            evaluatePowerFlow();
 
-            // Check Defeat
+            // 檢查是否全亮 (通關)
+            checkWinCondition();
+
+            // 檢查失敗
             if (gameState.moves <= 0 && !gameState.isWon) {
                 setTimeout(() => openModal('failModal'), 400);
             }
         }
 
-        // Corrupted Node Visual Glitch Flash
+        function refreshBoardDOM() {
+            const nodeEls = document.querySelectorAll('.node');
+            gameState.grid.forEach((node, idx) => {
+                const el = nodeEls[idx];
+                if (el) {
+                    if (node.state === 1) {
+                        el.classList.remove('off');
+                        el.classList.add('on');
+                    } else {
+                        el.classList.remove('on');
+                        el.classList.add('off');
+                    }
+                }
+            });
+        }
+
         function showCorruptedEffect() {
             document.body.classList.add('bypass-flash');
             const movesHud = document.getElementById('hudMoves');
@@ -1074,171 +781,66 @@
             }, 300);
         }
 
-        // Evaluate Power Flow (BFS)
-        function evaluatePowerFlow() {
-            const size = LEVELS[gameState.currentLevelIndex].size;
-            
-            // Clear powered state
-            gameState.grid.forEach(node => node.powered = false);
+        /* 檢查是否所有燈都被點亮 */
+        function checkWinCondition() {
+            const totalNodes = gameState.grid.length;
+            const onNodes = gameState.grid.filter(n => n.state === 1).length;
 
-            // Find all source nodes
-            const queue = [];
-            gameState.grid.forEach(node => {
-                if (node.type === 'source') {
-                    node.powered = true;
-                    queue.push(node);
-                }
-            });
+            document.getElementById('hudTargets').innerText = `${onNodes} / ${totalNodes}`;
 
-            // BFS Traversal
-            while (queue.length > 0) {
-                const current = queue.shift();
-                const currentConns = getRotatedConnections(current);
-
-                // Directions: 0: Top (y-1), 1: Right (x+1), 2: Bottom (y+1), 3: Left (x-1)
-                const neighbors = [
-                    { dir: 0, opp: 2, x: current.x, y: current.y - 1 },
-                    { dir: 1, opp: 3, x: current.x + 1, y: current.y },
-                    { dir: 2, opp: 0, x: current.x, y: current.y + 1 },
-                    { dir: 3, opp: 1, x: current.x - 1, y: current.y }
-                ];
-
-                neighbors.forEach(nb => {
-                    if (nb.x >= 0 && nb.x < size && nb.y >= 0 && nb.y < size) {
-                        const targetNode = gameState.grid[nb.y * size + nb.x];
-                        if (targetNode && targetNode.type !== 'empty' && !targetNode.powered) {
-                            const targetConns = getRotatedConnections(targetNode);
-                            // Check if current outputs in dir AND target inputs in opp dir
-                            if (currentConns[nb.dir] === 1 && targetConns[nb.opp] === 1) {
-                                targetNode.powered = true;
-                                queue.push(targetNode);
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Update UI Powered Classes
-            const nodeEls = document.querySelectorAll('.node');
-            let poweredTargets = 0;
-            let totalTargets = 0;
-
-            gameState.grid.forEach((node, idx) => {
-                if (node.type === 'target') totalTargets++;
-
-                const nodeEl = nodeEls[idx];
-                if (!nodeEl || node.type === 'empty') return;
-
-                if (node.powered) {
-                    nodeEl.classList.add('powered');
-                    const inner = nodeEl.querySelector('.node-inner');
-                    if (inner) {
-                        const rotConns = getRotatedConnections(node);
-                        const lines = inner.querySelectorAll('.laser-line');
-                        const dirs = ['top', 'right', 'bottom', 'left'];
-                        dirs.forEach((d, i) => {
-                            const line = inner.querySelector(`.laser-line.${d}`);
-                            if (line) {
-                                if (rotConns[i] === 1) line.classList.add('active');
-                                else line.classList.remove('active');
-                            }
-                        });
-                    }
-                    if (node.type === 'target') poweredTargets++;
-                } else {
-                    nodeEl.classList.remove('powered');
-                    const lines = nodeEl.querySelectorAll('.laser-line');
-                    lines.forEach(l => l.classList.remove('active'));
-                }
-            });
-
-            // Update Targets HUD
-            document.getElementById('hudTargets').innerText = `${poweredTargets} / ${totalTargets}`;
-
-            // Check Victory Condition
-            if (totalTargets > 0 && poweredTargets === totalTargets) {
+            if (onNodes === totalNodes) {
                 gameState.isWon = true;
                 audio.playWinFanfare();
 
-                // Clear bypassed status if beat properly
+                // 清除跳過標記
                 const bypassedIndex = gameState.bypassedLevels.indexOf(gameState.currentLevelIndex);
-                if (bypassedIndex !== -1) {
-                    gameState.bypassedLevels.splice(bypassedIndex, 1);
-                }
+                if (bypassedIndex !== -1) gameState.bypassedLevels.splice(bypassedIndex, 1);
 
-                // Unlock Next Level
                 if (gameState.currentLevelIndex + 1 >= gameState.unlockedLevels && gameState.currentLevelIndex + 1 < LEVELS.length) {
                     gameState.unlockedLevels = gameState.currentLevelIndex + 2;
                 }
                 saveProgress();
-
                 setTimeout(() => showWinModal(), 300);
             }
         }
 
-        // Helper: Get connection vector with rotation offset
-        function getRotatedConnections(node) {
-            const shift = node.rot % 4;
-            const res = [0, 0, 0, 0];
-            for (let i = 0; i < 4; i++) {
-                if (node.connections[i] === 1) {
-                    res[(i + shift) % 4] = 1;
-                }
-            }
-            return res;
-        }
-
-        // Update HUD display
         function updateHUD() {
             document.getElementById('hudLevel').innerText = `${String(gameState.currentLevelIndex + 1).padStart(2, '0')} / ${LEVELS.length}`;
-            
             const movesEl = document.getElementById('hudMoves');
             movesEl.innerText = gameState.moves;
 
-            if (gameState.moves <= 3) {
-                movesEl.className = "stat-value danger";
-            } else if (gameState.moves <= 6) {
-                movesEl.className = "stat-value warning";
-            } else {
-                movesEl.className = "stat-value";
-            }
+            if (gameState.moves <= 3) movesEl.className = "stat-value danger";
+            else if (gameState.moves <= 6) movesEl.className = "stat-value warning";
+            else movesEl.className = "stat-value";
+
+            const onNodes = gameState.grid.filter(n => n.state === 1).length;
+            document.getElementById('hudTargets').innerText = `${onNodes} / ${gameState.grid.length}`;
         }
 
         function updateStatusBanner(text, isWarning = false) {
             const banner = document.getElementById('statusBanner');
             banner.innerText = text;
-            if (isWarning) {
-                banner.style.borderColor = 'var(--magenta)';
-                banner.style.color = 'var(--magenta)';
-            } else {
-                banner.style.borderColor = 'var(--cyan)';
-                banner.style.color = 'var(--cyan)';
-            }
+            banner.style.borderColor = isWarning ? 'var(--magenta)' : 'var(--cyan)';
+            banner.style.color = isWarning ? 'var(--magenta)' : 'var(--cyan)';
         }
 
-        /* Bypass / Skip Level Handler */
         function bypassCurrentLevel() {
             audio.playBypassGlitch();
-
-            // Glitch flash
             document.body.classList.add('bypass-flash');
             setTimeout(() => document.body.classList.remove('bypass-flash'), 300);
 
-            // Record Bypassed Level
             if (!gameState.bypassedLevels.includes(gameState.currentLevelIndex)) {
                 gameState.bypassedLevels.push(gameState.currentLevelIndex);
             }
 
-            // Unlock next level
             if (gameState.currentLevelIndex + 1 >= gameState.unlockedLevels && gameState.currentLevelIndex + 1 < LEVELS.length) {
                 gameState.unlockedLevels = gameState.currentLevelIndex + 2;
             }
             saveProgress();
 
             closeModal('failModal');
-            updateStatusBanner(`⚠️ 區域已跳過 [BYPASSED] - 強行繞過章節 ${gameState.currentLevelIndex + 1}`, true);
+            updateStatusBanner(`⚠️ 矩陣已跳過 [BYPASSED] - 強行繞過章節 ${gameState.currentLevelIndex + 1}`, true);
 
-            // Auto advance or reopen select
             if (gameState.currentLevelIndex + 1 < LEVELS.length) {
                 initLevel(gameState.currentLevelIndex + 1);
             } else {
@@ -1246,23 +848,16 @@
             }
         }
 
-        /* Modals & UI Controls */
         function openModal(modalId) {
             if (modalId === 'levelModal') buildLevelGrid();
             document.getElementById(modalId).classList.add('active');
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
+        function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
 
         function showWinModal() {
-            const winMsg = document.getElementById('winMessage');
-            const winStats = document.getElementById('winStats');
-            
-            winMsg.innerText = `網絡區域 ${gameState.currentLevelIndex + 1} 覆寫成功！`;
-            winStats.innerText = `剩餘頻寬: ${gameState.moves} 步 | 狀態: 系統完全掌控`;
-            
+            document.getElementById('winMessage').innerText = `網絡矩陣 ${gameState.currentLevelIndex + 1} 點燈覆寫成功！`;
+            document.getElementById('winStats').innerText = `剩餘頻寬: ${gameState.moves} 步 | 矩陣狀態: 100% LIGHTS ON`;
             openModal('winModal');
         }
 
@@ -1271,7 +866,7 @@
             if (gameState.currentLevelIndex + 1 < LEVELS.length) {
                 initLevel(gameState.currentLevelIndex + 1);
             } else {
-                updateStatusBanner("🎉 恭喜！您已成功覆寫所有 10 個系統核心，完全控制網絡！");
+                updateStatusBanner("🎉 恭喜！您已成功點亮所有 10 個賽博矩陣，完全覆寫系統！");
             }
         }
 
@@ -1298,17 +893,12 @@
                 `;
 
                 if (isUnlocked) {
-                    btn.onclick = () => {
-                        closeModal('levelModal');
-                        initLevel(idx);
-                    };
+                    btn.onclick = () => { closeModal('levelModal'); initLevel(idx); };
                 }
-
                 grid.appendChild(btn);
             });
         }
 
-        // Initialize App
         window.addEventListener('DOMContentLoaded', () => {
             loadProgress();
             initLevel(0);
